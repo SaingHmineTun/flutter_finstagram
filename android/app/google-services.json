@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "5794210128",
+    "project_id": "flutter-finstagram-f6c10",
+    "storage_bucket": "flutter-finstagram-f6c10.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5794210128:android:372b0a46eed85892638c55",
+        "android_client_info": {
+          "package_name": "it.saimao.finstagram"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7ahqtZmt7wGUiW8u_dwhbAMfcpJaSXSU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

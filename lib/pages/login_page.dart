@@ -1,7 +1,9 @@
+import 'package:finstagram/services/firebase_service.dart';
 import 'package:finstagram/widgets/app_bar_widget.dart';
 import 'package:finstagram/widgets/mao_button.dart';
 import 'package:finstagram/widgets/mao_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,8 +17,15 @@ class _LoginPageState extends State<LoginPage> {
   late double _deviceWidth;
   final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
 
-  String? email;
-  String? password;
+  late String email;
+  late String password;
+  late FirebaseService firebaseService;
+
+  @override
+  void initState() {
+    super.initState();
+    firebaseService = GetIt.instance.get<FirebaseService>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,13 +67,25 @@ class _LoginPageState extends State<LoginPage> {
           _loginFormKey.currentState!
               .save(); // Call every onSave() methods in FormField
           message = "Login success: Email is $email and Password is $password";
+          firebaseService.login(email, password).then((loginSuccess) {
+            if (context.mounted) {
+              if (loginSuccess) {
+                message = "Login success";
+                Navigator.popAndPushNamed(context, "home");
+              } else {
+                message = "Incorrect email or password";
+              }
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(message)));
+            }
+          });
         } else {
           message = "Login failed";
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(message)));
         }
-
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(message)));
       },
       text: "Login",
       width: _deviceWidth,
@@ -81,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
         return "Email must not be empty!";
       },
       onSave: (val) {
-        email = val;
+        if (val != null) email = val;
       },
     );
   }
@@ -96,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
             : "Password must be at least 5 characters";
       },
       onSave: (val) {
-        password = val;
+        if (val != null) password = val;
       },
     );
   }
